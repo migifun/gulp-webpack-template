@@ -3,9 +3,10 @@ const webpackStream     = require( "webpack-stream" );
 const webpack           = require( "webpack" );
 const pug               = require( "gulp-pug" );
 const styl              = require( "gulp-stylus" );
+const sync              = require( "browser-sync" );
 
 const webpackConfig     = require( "./webpack.config" );
-const buildCmds         = ['webpack', 'pug', 'styl'];
+const buildCmds         = ['webpack', 'pug', 'styl', 'reload'];
 
 //
 // js
@@ -34,8 +35,26 @@ gulp.task( "styl", ()=>
 });
 
 //
+// brower-sync
+gulp.task( "sync", ()=>
+{
+    sync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    });
+});
+
+//
+// brower-reload
+gulp.task( "reload", ()=>
+{
+    sync.reload();
+});
+
+//
 // run
-gulp.task( "default", () =>
+gulp.task( "default", [ "sync" ], () =>
 {
     gulp.watch('./src/babel/**/*.es6', buildCmds);
     gulp.watch('./src/pug/**/*.pug', buildCmds);
